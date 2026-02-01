@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <title>Blood Pressure Assessment</title>
+	<!-- Clean css pattern for the page -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 420px;
+            background: white;
+            padding: 24px;
+            margin: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            font-weight: bold;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 6px;
+            box-sizing: border-box;
+        }
+
+        .checkbox-group {
+            margin-top: 12px;
+        }
+
+            .checkbox-group label {
+                font-weight: normal;
+            }
+
+        button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #007acc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+            button:hover {
+                background-color: #005fa3;
+            }
+
+        .result {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 4px;
+            background-color: #eef3f7;
+        }
+
+        .error {
+            margin-top: 20px;
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>
+            Blood Pressure Assessment
+        </h2>
+		<!-- Input for blood pressure -->
+        <label for="systolic"> Systolic BP: mmHg</label>
+        <input type="number" id="systolic" placeholder="e.g. 120">
+
+        <label for="diastolic"> Diastolic BP: mmHg</label>
+        <input type="number" id="diastolic" placeholder="e.g. 120">
+
+		<!-- Choose checkbox for diabetes and pregnant status -->
+        <div class="checkbox-group">
+            <label>
+                <input type="checkbox" , id="diabetes">
+                Has Diabetes
+            </label>
+        </div>
+
+        <div class="checkbox-group">
+            <label>
+                <input type="checkbox" , id="pregnant">
+                Is Pregnant
+            </label>
+        </div>
+    </div>
+
+    <button onclick="GetRec()"> Get Recommendation </button>
+    <div id="output"></div>
+
+    <script>
+        function GetRec() {
+			// Get input data by id
+            const systolicis = parseInt(document.getElementById("diastolic").value);
+            const diastolic = parseInt(document.getElementById("diastolic").value);
+            const hasDiabetes = document.getElementById("diabetes").checked;
+            const isPregnant = document.getElementById("pregnant").checked;
+            const outputDiv = document.getElementById("output")
+            outputDiv.innerHTML = "";
+
+            //input validation
+            if (isNaN(systolicis) || isNaN(diastolic)) {
+                outputDiv.innerHTML = "<div class='error'>Please enter valid blood pressure values.</div>";
+                return;
+            }
+            if (systolic < 80 || systolic > 250 || diastolic < 40 || diastolic > 150) {
+				// Display the error information in warning pattern
+                outputDiv.innerHTML = "<div class='error'>Blood pressure values are out of range</div>";
+                return;
+            }
+
+            // Logic for recommendation
+            let recommendation = "";
+            if (isPregnant) {
+                recommendation = "Consult specialist - many BP medications contraindicated in pregnancy";
+            }
+            else if (hasDiabetes && (systolicis >= 130 || diastolic >= 80)) {
+                recommendation = "Consider ACE inhibitor or ARB (preferred for diabetes)";
+            }
+            else if (systolicis >= 130 || diastolic >= 80) {
+                recommendation = "Consider thiazide diuretic or calcium channel blocker";
+            } else {
+                recommendation = "✓ Blood pressure in normal range - continue lifestyle modifications";
+            }
+            output.innerHTML = "<div class='result'>" + recommendation + "</div>";
+        }
+    </script>
+</body>
+</html>
+
