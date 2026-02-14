@@ -47,12 +47,11 @@ external healthcare sources
             response = requests.get(self.base_url, params=params, timeout=self.timeout)
 
 			# Error handling
-            if response.status_code != 200:
-                raise RuntimeError(
-                    f"OpenFDA API error: {response.status_code} - {response.text}"    
-                )
             if response.status_code == 429:
                 raise RuntimeError("OpenFDA API rate limit exceeded")
+            if response.status_code != 200:
+                raise RuntimeError(f"OpenFDA API error: {response.status_code} - {response.text}")
+
             
             data = response.json()
 

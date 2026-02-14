@@ -22,8 +22,12 @@ def test_moderate_risk():
 
 
 def test_low_risk():
-    low_example = {"blood_pressure": {"systolic": 100, "diastolic": 70}, "fasting_glucose": 99, "bmi": 20, 
-"age": 37}
+    low_example = {
+        "blood_pressure": {"systolic": 100, "diastolic": 70},
+        "fasting_glucose": 99,
+        "bmi": 20,
+        "age": 37
+    }
     try:
         response = requests.post(api_url, json=low_example)
         if response.status_code != 200:
@@ -34,7 +38,31 @@ def test_low_risk():
         print(data)
     except requests.exceptions.RequestException as e:
         print(f"Request failed: {e}")
+
+def test_high_risk():
+    high_example = {
+        "blood_pressure": {"systolic": 100, "diastolic": 70},
+        "fasting_glucose": 130,
+        "bmi": 20,
+        "age": 37
+    }
+    try:
+        response = requests.post(api_url, json=high_example)
+        if response.status_code != 200:
+            raise RuntimeError(
+                f"API error: {response.status_code} - {response.text}"    
+            )
+        data = response.json()
+        print(data)
+    except requests.exceptions.RequestException as e:
+        print(f"Request failed: {e}")
+
    
 if __name__ == "__main__":
+    print("==============Moderate Risk Test=============")
     test_moderate_risk()
+    print("==============Low Risk Test=============")
     test_low_risk()
+    print("==============High Risk Test=============")
+    test_high_risk()
+

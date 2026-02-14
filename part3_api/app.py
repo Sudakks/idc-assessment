@@ -9,7 +9,7 @@ class BloodPressure(BaseModel):
     systolic: int = Field(...,gt=0, lt=300)
     diastolic: int = Field(..., gt=0, lt=300)
 
-class (BaseModel):
+class RiskAssessmentRequest(BaseModel):
     blood_pressure: BloodPressure
     fasting_glucose: int = Field(..., ge=0, le=150)
     bmi: float=Field(..., ge=0, le=100)
@@ -34,7 +34,7 @@ def assess_risk(
 
 
 	# Assess logic
-    if systolic >= 140 and diastolic >= 90:
+    if systolic >= 140 or diastolic >= 90:
         high_risk = True
     elif systolic >= 130 and diastolic >= 80:
         moderate_risk = True
@@ -53,6 +53,7 @@ def assess_risk(
         high_risk = True
     elif bmi >= 25:
         moderate_risk = True
+
 
     if high_risk == True:
         risk_level = "High Risk"
